@@ -26,7 +26,7 @@ class CalorieCounter(input: List<String>) {
         if (input.isEmpty()) {
             return emptyList()
         }
-        var totals = mutableListOf(0)
+        val totals = mutableListOf(0)
         for (cals in input) {
             if (cals.isBlank()) {
                 totals.add(0)
