@@ -12,22 +12,42 @@ class Day02Tests {
     private val rockPaperScissors = RockPaperScissors(input)
 
     @Test
-    fun `Calculate first round score`() {
-        assertEquals(8, rockPaperScissors.roundScores[0])
+    fun `Calculate part 1 first round score`() {
+        assertEquals(8, rockPaperScissors.part1RoundScores[0])
     }
 
     @Test
-    fun `Calculate second round score`() {
-        assertEquals(1, rockPaperScissors.roundScores[1])
+    fun `Calculate part 1 second round score`() {
+        assertEquals(1, rockPaperScissors.part1RoundScores[1])
     }
 
     @Test
-    fun `Calculate third round score`() {
-        assertEquals(6, rockPaperScissors.roundScores[2])
+    fun `Calculate part 1 third round score`() {
+        assertEquals(6, rockPaperScissors.part1RoundScores[2])
     }
 
     @Test
-    fun `Calculate total score`() {
-        assertEquals(15, rockPaperScissors.totalScore())
+    fun `Calculate part 1 total score`() {
+        assertEquals(15, rockPaperScissors.part1TotalScore())
+    }
+
+    @Test
+    fun `Calculate part 2 first round score`() {
+        assertEquals(4, rockPaperScissors.part2RoundScores[0])
+    }
+
+    @Test
+    fun `Calculate part 2 second round score`() {
+        assertEquals(1, rockPaperScissors.part2RoundScores[1])
+    }
+
+    @Test
+    fun `Calculate part 2 third round score`() {
+        assertEquals(7, rockPaperScissors.part2RoundScores[2])
+    }
+
+    @Test
+    fun `Calculate part 2 total score`() {
+        assertEquals(12, rockPaperScissors.part2TotalScore())
     }
 }
