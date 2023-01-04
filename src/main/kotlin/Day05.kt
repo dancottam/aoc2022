@@ -1,14 +1,14 @@
 fun main() {
     fun part1(input: List<String>): String {
-        val shipCargo = ShipCargo(input)
-        shipCargo.runAllStepsWithCrateMover9000()
-        return shipCargo.topCrates()
+        val crateMover = CrateMover9000(input)
+        crateMover.runAllSteps()
+        return crateMover.topCrates()
     }
 
     fun part2(input: List<String>): String {
-        val shipCargo = ShipCargo(input)
-        shipCargo.runAllStepsWithCrateMover9001()
-        return shipCargo.topCrates()
+        val crateMover = CrateMover9001(input)
+        crateMover.runAllSteps()
+        return crateMover.topCrates()
     }
 
     // test if implementation meets criteria from the description, like:
@@ -20,10 +20,16 @@ fun main() {
     part2(input).println()
 }
 
-class ShipCargo(input: List<String>) {
+data class Step (
+    val amount: Int,
+    val from: Int,
+    val to: Int
+)
+
+abstract class CrateMover(input: List<String>) {
 
     val stacks = calculateStacks(input)
-    private val steps = parseSteps(input)
+    val steps = parseSteps(input)
 
     private fun calculateStacks(input: List<String>): List<ArrayDeque<Char>> {
         val stackInput = mutableListOf<String>()
@@ -60,44 +66,6 @@ class ShipCargo(input: List<String>) {
         return steps
     }
 
-    fun runAllStepsWithCrateMover9000() {
-        runStepsWithCrateMover9000(steps.size)
-    }
-
-    fun runStepsWithCrateMover9000(num: Int) {
-        repeat(num) {
-            runNextStep(true)
-        }
-    }
-
-    fun runAllStepsWithCrateMover9001() {
-        runStepsWithCrateMover9001(steps.size)
-    }
-
-    fun runStepsWithCrateMover9001(num: Int) {
-        repeat(num) {
-            runNextStep(false)
-        }
-    }
-
-    private fun runNextStep(moveCratesIndividually: Boolean) {
-        val nextStep = steps.removeFirst()
-        if (moveCratesIndividually) {
-            repeat(nextStep.amount) {
-                val crate = stacks[nextStep.from - 1].removeFirst()
-                stacks[nextStep.to - 1].addFirst(crate)
-            }
-        } else {
-            val intermediate = mutableListOf<Char>()
-            repeat(nextStep.amount) {
-                intermediate.add(stacks[nextStep.from - 1].removeFirst())
-            }
-            for (crate in intermediate.reversed()) {
-                stacks[nextStep.to - 1].addFirst(crate)
-            }
-        }
-    }
-
     fun topCrates(): String {
         val topCrates = StringBuilder()
         for (stack in stacks) {
@@ -106,10 +74,42 @@ class ShipCargo(input: List<String>) {
         return topCrates.toString()
     }
 
+    fun runAllSteps() {
+        runSteps(steps.size)
+    }
+
+    fun runSteps(num: Int) {
+        repeat(num) {
+            runNextStep()
+        }
+    }
+
+    private fun runNextStep() {
+        val nextStep = steps.removeFirst()
+        moveCrates(nextStep.amount, nextStep.from, nextStep.to)
+    }
+
+    abstract fun moveCrates(amount: Int, from: Int, to: Int)
 }
 
-data class Step (
-    val amount: Int,
-    val from: Int,
-    val to: Int
-)
+class CrateMover9000(input: List<String>) : CrateMover(input) {
+    override fun moveCrates(amount: Int, from: Int, to: Int) {
+        repeat(amount) {
+            val crate = stacks[from - 1].removeFirst()
+            stacks[to - 1].addFirst(crate)
+        }
+    }
+}
+
+class CrateMover9001(input: List<String>) : CrateMover(input) {
+    override fun moveCrates(amount: Int, from: Int, to: Int) {
+        val intermediate = mutableListOf<Char>()
+        repeat(amount) {
+            intermediate.add(stacks[from - 1].removeFirst())
+        }
+        for (crate in intermediate.reversed()) {
+            stacks[to - 1].addFirst(crate)
+        }
+    }
+
+}
